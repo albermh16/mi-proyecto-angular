@@ -1,0 +1,192 @@
+<div className="container-fluid m-5">
+      <div className="row">
+        {/* Columna izquierda: introducción y redes sociales */}
+        <div className="col-lg-5 mb-4 mb-lg-0 ">
+          <h2 style= "color: #e1522e; font-weight: 600"  className="mb-3">
+            Hola, ¿creamos tu cuenta?
+          </h2>
+          <p className="text-muted">
+            Estás a punto de crear tu cuenta en HSNstore con lo que conseguirás
+            acceder a promociones especiales, acumular puntos, y ahorrarte
+            dinero...
+          </p>
+          <p>
+            <a href="#" className="text-primary text-decoration-underline">
+              Uy, si yo ya tengo una c
+          uenta creada.
+            </a>
+          </p>
+          {/* Lista de ventajas */}
+          <div className="mb-3">
+            @for(item of itemsPanelRegistro; track $index)
+            
+              <p key={idx} className="mb-2 d-flex align-items-start">
+                <span
+                  className="me-2"
+                  style="
+                    color: #e1522e;
+                    font-size: 1.1rem;
+                    line-height: 1;"
+
+                >
+                  ✔
+                </span>
+                <span>{item}</span>
+              </p>
+            
+          </div>
+          {/* Redes sociales */}
+          <div className="p-3" style="background-color: #f5f5f5;">
+            <h6 className="fw-bold text-uppercase mb-3">
+              Crea o accede con tus redes sociales
+            </h6>
+            <div className='d-flex flex-row justify-content-center'>
+              <button
+                type="button"
+                className="btn d-flex align-items-center border"
+                style="background-color: #fff; border-color: #dadce0;"
+              >
+                <img
+                  src="https://developers.google.com/identity/images/g-logo.png"
+                  alt="Continuar con Google"
+                  width="20"
+                  height="20"
+                  className="me-2"
+                />
+                <span className="flex-grow-1 text-center">
+                  Continuar con Google
+                </span>
+              </button>
+              <button
+                type="button"
+                className="btn d-flex align-items-center border"
+                style="background-color: #fff; border-color: #dadce0;"
+              >
+                <img src="https://www.hsnstore.com/skin/frontend/default/hsnreborn/images/logos/facebook-logo-5-1.png" alt="Continuar con Facebook" width="20" height="20" className="me-2"/>
+                <span className="flex-grow-1 text-center">
+                  Continuar con Facebook
+                </span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Columna derecha: formulario de registro */}
+        <div className="col-lg-7 ">
+          <div className="border p-4">
+            <h2 className="h5 fw-bold mb-3">Datos de identificación de cuenta</h2>
+            {/* Selector de tipo de cuenta */}
+            <div className="mb-2"  aria-label="Tipo de cuenta">
+              <button
+                type="button"
+                className="btn mx-3"
+                style="
+                  border-color: #e1522e;
+                  color: #e1522e;
+                  font-weight: 600;
+                "
+                onClick={ev => setFormulario({...formulario, tipoCuenta:'particular'})}
+              >
+                Particular
+              </button>
+              <button
+                type="button"
+                className="btn"
+                style=
+                 " border-color: #b0b0b0;
+                  color: #b0b0b0;
+                  font-weight: 600;"
+                
+                onClick={ev => setFormulario({...formulario, tipoCuenta:'empresa'})}
+                disabled
+              >
+                Empresa
+              </button>
+            </div>
+            <p className="small text-danger">
+              * Atención: si eres autónomo o empresa y necesitas una factura
+              selecciona la opción EMPRESA.
+            </p>
+
+            {/* =================== Formulario ========================== */}
+            <form className="needs-validation" noValidate onSubmit={ handlerSubmitButton }>
+
+             {
+                  [ 'nombre', 'apellidos', 'email', 'password', 'planAmigo' ].map( ( campo, pos  ) =>
+                    <InputBox  key={pos} 
+                               nameInput={campo} 
+                               labelInput={ campo==='planAmigo' ? 'Código Plan Amigo' : campo.charAt(0).toUpperCase() + campo.slice(1) } 
+                               tipoInput={ campo==='email' ? 'email' : ( campo==='password' ? 'password' : 'text' ) } 
+                               eventoOnChange={ OnChangeHandler } />
+                  )
+
+              }
+
+              <div className="mb-3">
+                <label htmlFor="genero" className="form-label fw-bold">
+                  Género <span className="text-danger">*</span>
+                </label>
+                <select
+                  id="genero"
+                  className="form-select"
+                  name="genero"
+                  defaultValue={formulario.genero || "" }
+                  onChange={ OnChangeHandler }
+                  required
+                >
+                  <option value="" disabled>
+                    Selecciona un género
+                  </option>
+                  <option>Hombre</option>
+                  <option>Mujer</option>
+                  <option>No binario</option>
+                  <option>Prefiero no decirlo</option>
+                </select>
+                <div className="invalid-feedback">
+                  Selecciona una opción.
+                </div>
+              </div>
+
+              {/* Promociones y privacidad */}
+              <h6 className="fw-bold">Enviar promociones especiales para clientes</h6>
+              <div className="form-check mb-2">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="promo"
+                />
+                <label className="form-check-label" htmlFor="promo">
+                  Quiero recibir promociones exclusivas y contenidos personalizados
+                </label>
+              </div>
+              <div className="form-check mb-3">
+                <input
+                  className="form-check-input"
+                  type="checkbox"
+                  id="privacidad"
+                  required
+                />
+                <label className="form-check-label" htmlFor="privacidad">
+                  He leído y acepto la{" "}
+                  <a href="#" className="text-primary text-decoration-underline">
+                    Política de privacidad
+                  </a>
+                </label>
+                <div className="invalid-feedback">
+                  Debes aceptar la política de privacidad.
+                </div>
+              </div>
+              {
+              /* Botón de envío 
+              <button type="button" className="btn btn-success w-100" onClick={ handlerSubmitButton }>
+                REGISTRARME YA
+              </button>              
+              */}
+              <button type="submit" className="btn btn-success w-100">
+                REGISTRARME YA
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
