@@ -1,6 +1,9 @@
 import { JsonPipe } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject, OnDestroy, OnInit } from '@angular/core';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
+import { ServAPINode } from '../../../servicios/serv-apinode';
+import { Subscription } from 'rxjs';
+import IRespuestaNode from '../../../modelos/IRespuestaNode';
 
 @Component({
   selector: 'app-registro',
@@ -8,7 +11,13 @@ import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angula
   templateUrl: './registro.html',
   styleUrl: './registro.css',
 })
-export class Registro {
+export class Registro implements OnInit, OnDestroy{
+  //Solicito al DI la instancia del servicio ServAPINode para usar sus métodos
+  // Lo puedo hacer en el constructor o haciendo uso de la funcion inject()
+
+  private servAPINode = inject(ServAPINode);
+  private idObservableRegistro?: Subscription;
+
   miform: FormGroup = new FormGroup(
     {
       nombre: new FormControl('',[
@@ -43,6 +52,19 @@ export class Registro {
     }
   ); //<---objeto a mapear con tag <form...> usando directiva FormGroupDirective: [formGroup]="miform" (ngSubmit)="onSubmit()"
 
+  ngOnDestroy(): void {
+    console.log('Componente Registro destruido');
+    // Si existe la suscripcion, la cancelamos para evitar fugas de memoria. NUNCA DEJAR OBSERVABLES ABIERTOS!!
+    if(this.idObservableRegistro){
+      this.idObservableRegistro.unsubscribe();
+    }
+
+  }
+  ngOnInit(): void {
+    console.log('Componente Registro iniciado');
+  }
+
+  
   getErrorMessage(campo: string): string {
     const control = this.miform.get(campo);
     if (!control || !control.errors) return '';
@@ -103,17 +125,17 @@ export class Registro {
 
 
   MandarDatosRegistro():void{
-    if(this.miform.invalid){
-
-      
-      this.miform.markAllAsTouched(); // <--- Marca todos los campos como tocados para mostrar los mensajes de error
-      console.log('Formulario de registro no válido, revisa los errores....');
-      return;
-      
-    }
-    this.miform.valid; // <--- Aquí el formulario es válido
     
     console.log('Datos del formulario de registro a mandar a nodejs....', this.miform.value);
 
+    this.idObservableRegistro = this.servAPINode
+                                        .Registro(this.miform.value)
+                                        .subscribe(
+                                          (respuesta:IRespuestaNode) => {
+                                            console.log('Respuesta del servidor Node.js:', respuesta);
+                                            //Comprobamos si el codigo == 0, entones, registro OK y decimos al cliente que revise su email para activar la cuenta
+                                            // si no, mostramos el mensaje de error en la vista del componente
+                                          }
+                                        );
   }
 } 
