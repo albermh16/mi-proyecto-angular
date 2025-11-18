@@ -88,7 +88,17 @@ https://www.hsnstore.com/skin/frontend/default/hsnreborn/images/logos/facebook-l
             <label for="{{campo}}" class="form-label">{{campo}}</label>
             <input type="text" class="form-control" formControlName="{{campo}}">
           </div>
+
+            @if(miform.get(campo)!.invalid && miform.get(campo)!.dirty){
+
+            <span>
+              <small class="text-danger">{{ getErrorMessage(campo) }}</small>
+            </span>
+
+            }
           }
+
+
 
           <div class="mb-3">
             <label for="genero" class="form-label fw-bold">
@@ -130,7 +140,7 @@ https://www.hsnstore.com/skin/frontend/default/hsnreborn/images/logos/facebook-l
               Debes aceptar la política de privacidad.
             </div>
           </div>
-          <button type="submit" class="btn btn-success w-100">
+          <button type="submit" class="btn btn-success w-100" [disabled]="miform.invalid">
             REGISTRARME YA
           </button>
         </form>
