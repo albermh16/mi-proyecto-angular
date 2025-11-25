@@ -1,8 +1,8 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { appConfig } from './app/app.config';
-//import { App } from './app/app';
-import { Registro } from './app/componentes/zonaCliente/Registro/registro';
-import { Login } from './app/componentes/zonaCliente/Login/login';
+import { App } from './app/app';
 
-bootstrapApplication(Login, appConfig)
+// en el componente raiz App esta definido nuestro layout comun con un Header y Footer y el routerOutlet
+// para cargar los demas componentes segun la ruta
+bootstrapApplication(App, appConfig)
   .catch((err) => console.error(err));
