@@ -43,4 +43,15 @@ export class ServAPINode {
                                   
                                 // )
                               }
+
+  public Login( email:string, password:string ): Observable<IRespuestaNode>{
+    return this.http
+          .post<IRespuestaNode>(
+                'http://localhost:3000/api/Cliente/Login',
+                { email, password },
+                {
+                  headers: { 'Content-Type': 'application/json' }
+                }
+              );
+  }
 }
