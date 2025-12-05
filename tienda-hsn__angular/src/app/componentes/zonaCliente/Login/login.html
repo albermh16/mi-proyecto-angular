@@ -1,4 +1,4 @@
-  <div class="container my-5">
+    <div class="container my-5">
       <div class="border p-4">
         <div class="row">
           <!-- {/* Sección de acceso (izquierda) */} -->
@@ -11,12 +11,14 @@
               utilizaste en el registro
             </p>
             <!--
-            Para capturar el valor del formulario (estado valido o invalido, errores, etc...) te defines una variable template en el formulario
-            y la igualas a la directiva ngForm
-            -->
-            <form class="needs-validation" #formLogin="ngForm" (ngSubmit)="SubmitLogin(formLogin)">
-              <!-- DIV para mostrar exclusivamente mensajes de error del servidor o de google, facebook-->
+              para capturar el valor del formulario (estado valido o invalido, errores, etc...te defines una variable template en el formulario
+              y la igualas a la directiva ngForm
+              -->
+            <form class="needs-validation" #formLogin="ngForm" (ngSubmit)="SubmitLogin(formLogin)" >
+
+              <!-- DIV para mostrar exclusivamente mensajes de error del servidor o de google o de facebook -->
                <div class="text-danger" #divErrores></div>
+
                
               <div class="mb-3">
                 <label for="loginEmail" class="form-label">
@@ -40,8 +42,13 @@
                   [(ngModel)]="modelLogin.email"
                   #email="ngModel"
                   required
-                  pattern="/^.+@.+\..{2,3}$/"
-                />
+                  
+                  />
+                  <!--
+                    pattern="/^.+@.+\..\{2,3\}$/"
+
+                  -->
+
                 @if( email.invalid && (email.dirty || email.touched)) {
                   @if( email.errors?.['required']) {
                     <span class="text-danger"> * el correo electrónico es obligatorio</span>
@@ -68,8 +75,12 @@
                     [(ngModel)]="modelLogin.password"
                     #password="ngModel"
                     required
-                    pattern="/^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=[\]{};:,.\/?])(?!.*\s).{6,}$/"
-                  />
+                    />
+                    <!-- 
+                      pattern="/^\(?=.*\d\)\(?=.*\[a-z\]\)\(?=.*\[A-Z\]\)\(?=.*\[!@#$%^&*_+\]\)\(?!.*\s\).\{6,\}$/"
+                      
+                     -->
+
                   <button
                     type="button"
                     class="input-group-text bg-white border-start-0"
@@ -77,9 +88,7 @@
                   >
                     @if(showPassword) {
                       <svg
-                        xmlns="
-                              http://www.w3.org/2000/svg
-                              "
+                        xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
                         fill="currentColor"
@@ -90,9 +99,7 @@
                       </svg>
                     } @else {
                       <svg
-                        xmlns="
-http://www.w3.org/2000/svg
-"
+                        xmlns="http://www.w3.org/2000/svg"
                         width="16"
                         height="16"
                         fill="currentColor"
@@ -127,7 +134,9 @@ http://www.w3.org/2000/svg
               <button
                 type="submit"
                 class="btn w-100"
-                style="background-color: #fff;border-color: #e1522e;color: #e1522e;font-weight: 600;">
+                style="background-color: #fff;border-color: #e1522e;color: #e1522e;font-weight: 600;"
+                [disabled]="formLogin.invalid"
+                >
                 INICIAR SESIÓN
               </button>
               <div class="text-danger mt-2" id="error"></div>
@@ -139,9 +148,7 @@ http://www.w3.org/2000/svg
                 <span class="text-success small d-flex align-items-center">
                   <!-- {/* Icono de candado (simplificado) */} -->
                   <svg
-                    xmlns="
-http://www.w3.org/2000/svg
-"
+                    xmlns="http://www.w3.org/2000/svg"
                     width="14"
                     height="14"
                     fill="currentColor"
@@ -180,9 +187,7 @@ http://www.w3.org/2000/svg
                 (click)="LoginWithGoogle()"
               >
                 <img
-                  src="
-https://developers.google.com/identity/images/g-logo.png
-"
+                  src="https://developers.google.com/identity/images/g-logo.png"
                   alt="Google"
                   width="20"
                   height="20"
@@ -198,9 +203,7 @@ https://developers.google.com/identity/images/g-logo.png
                 style="background-color: #fff; border-color: #dadce0;"
               >
                 <svg
-                  xmlns="
-http://www.w3.org/2000/svg
-"
+                  xmlns="http://www.w3.org/2000/svg"
                   width="20"
                   height="20"
                   fill="#1877F2"
@@ -231,3 +234,4 @@ http://www.w3.org/2000/svg
         </p>
       </div>
     </div>
+

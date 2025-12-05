@@ -7,9 +7,6 @@ import { Component } from '@angular/core';
   styleUrl: './registro-ok.css',
 })
 export class RegistroOK {
-  // necesitamos recuperar los datos de idCliente generado con el nombre y email del cliente recien registrado
-  // para mostrarlos en la vista de este componente... haremos uso de un servicio
-
-  
-
+//necesitamos recuperar los datos de idCliente generado con el nombre y email del cliente recien registrado
+//para mostrarlos en la vista de este componente...haremos uso de un servicio
 }
