@@ -1,5 +1,9 @@
+<<<<<<< HEAD
 import { Directive, ElementRef, Host, HostListener, inject, output } from '@angular/core';
 import { StorageGlobal } from '../servicios/storage-global';
+=======
+import { Directive, ElementRef, Host, HostListener } from '@angular/core';
+>>>>>>> origin/main
 
 @Directive({
   selector: '[appDragAndDrop]'
@@ -7,12 +11,16 @@ import { StorageGlobal } from '../servicios/storage-global';
 export class DragAndDrop {
   //directiva q vamos a usar para habilitar funcionalidad de arrastrar y soltar (drag and drop) en los elementos a los q se aplique esta directiva
   //en nuestro caso en el carrito del header de la tienda
+<<<<<<< HEAD
    //private elem:ElementRef=inject(ElementRef) //<---- forma nueva de inyectar dependencia del elemento sobre el q aplico directiva
   private storageGlobal=inject(StorageGlobal); //<---- inyeccion del servicio de almacenamiento global para acceder al carrito
   public showPanelItemsCartEvent=output<boolean>();
 
 
 
+=======
+ 
+>>>>>>> origin/main
   //inteceptamos eventos dragover, dragleave, drop en el elemento DOM al q se aplica la directiva
   // y gestionamos la funcionalidad de arrastrar y soltar
   //para interceptar los eventos del elemento sobre el q se aplica la directiva usamos el decorador @HostListener de angular
@@ -30,6 +38,7 @@ export class DragAndDrop {
     console.log('evento dragleave en div carrito');
   }
 
+<<<<<<< HEAD
   @HostListener('drop', ['$event']) dropDivCarrito(evento: DragEvent) {
     evento.preventDefault(); // Evitar el comportamiento por defecto
     //this.el.nativeElement.classList.remove('drag-over');
@@ -51,6 +60,13 @@ export class DragAndDrop {
       console.log('DROPEVENT en DIRECTIVA DRAG-AND-DROP: Producto añadido al carrito, estado actual del carrito:', this.storageGlobal.GetCarrito()());
       
     }
+=======
+  @HostListener('drop', ['$event']) dropDivCarrito(event: DragEvent) {
+    event.preventDefault(); // Evitar el comportamiento por defecto
+    this.el.nativeElement.classList.remove('drag-over');
+    
+    console.log('evento drop en div carrito...', event);
+>>>>>>> origin/main
   }
 
   constructor(private el: ElementRef) { //<---- de forma predeterminada angular inyecta en el constructor de la directiva el elemento DOM al q se aplica la directiva

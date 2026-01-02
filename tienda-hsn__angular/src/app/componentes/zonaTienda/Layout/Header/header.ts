@@ -1,24 +1,43 @@
+<<<<<<< HEAD
 import { Component, computed, inject, Injector, OnDestroy, OnInit, signal, Signal } from '@angular/core';
 import { ServAPINode } from '../../../../servicios/serv-apinode';
 import { map, Observable, Subscription, tap } from 'rxjs';
 import IRespuestaNode from '../../../../modelos/IRespuestaNode';
 import { AsyncPipe, NgStyle } from '@angular/common';
+=======
+import { Component, inject, Injector, OnDestroy, OnInit, signal, Signal } from '@angular/core';
+import { ServAPINode } from '../../../../servicios/serv-apinode';
+import { map, Observable, Subscription, tap } from 'rxjs';
+import IRespuestaNode from '../../../../modelos/IRespuestaNode';
+import { AsyncPipe } from '@angular/common';
+>>>>>>> origin/main
 import { StorageGlobal } from '../../../../servicios/storage-global';
 import ICliente from '../../../../modelos/interfaces_ORM/ICliente';
 import { CamelCaseStringPipe } from '../../../../pipes/camel-case-string-pipe';
 import ICategoria from '../../../../modelos/interfaces_ORM/ICategoria';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { DragAndDrop } from '../../../../directivas/drag-and-drop';
+<<<<<<< HEAD
 import IPedido from '../../../../modelos/interfaces_ORM/IPedido';
 
 @Component({
   selector: 'app-header',
   imports: [AsyncPipe, CamelCaseStringPipe, DragAndDrop, NgStyle ],
+=======
+
+@Component({
+  selector: 'app-header',
+  imports: [AsyncPipe, CamelCaseStringPipe, DragAndDrop ],
+>>>>>>> origin/main
   templateUrl: './header.html',
   styleUrl: './header.css',
 })
 export class Header {
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> origin/main
   private fetchNode = inject(ServAPINode);
   private storageGlobal = inject(StorageGlobal); //<--- inyectamos servicio de almacenamiento global, para recuperar datos del usuario logueado
 
@@ -36,6 +55,7 @@ export class Header {
   //señal para almacenar las subcategorias de la categoria principal sobre la que estamos situando el raton
   //public subcatSignal:Signal<Array<ICategoria & {subcategorias: ICategoria[]}>> = signal<Array<ICategoria & {subcategorias: ICategoria[]}>> ([]);
 
+<<<<<<< HEAD
   public carrito:Signal<IPedido>= this.storageGlobal.GetCarrito().asReadonly(); //<---- obtenemos el carrito/pedido actual como señal de solo lectura
   public totalItems:Signal<number>=computed( () => this.carrito().itemsPedido.reduce( (acc, item) => acc + item.cantidad, 0) ); //<---- señal para almacenar el total de items en el carrito
   public showPanelItemsCart=signal<boolean>(false); //<---- señal para mostrar/ocultar el panel de items del carrito
@@ -43,6 +63,8 @@ export class Header {
 
 
 
+=======
+>>>>>>> origin/main
 CargarSubcats(categoria: ICategoria) {
   console.log('evento onmouseenter en categoria principal para cargar subcategorias, estas en CATEGORIA PRINCPAL=...', categoria);
   this.showPanel.set(true); // <---- muestro el panel de subcategorias
