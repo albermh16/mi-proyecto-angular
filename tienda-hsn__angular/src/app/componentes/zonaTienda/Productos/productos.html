@@ -1,1 +1,34 @@
-<p>productos works!</p>
+        <div class="container">
+
+            <div class='row'>
+                <div class='col d-flex flex-row justify-content-between align-items-center'>
+                    <div style='font-size:1.5em; color:#57cad9; font-weight:bold;'> {{ productos().length}} Productos encontrados</div>
+                    <div>
+                        <select class="form-select" aria-label="Default select example">
+                            <option default>Ordenar por: Relevancia</option>
+                            <option value="2">Recomendados HSN</option>
+                            <option value="3">Mayor descuento</option>
+                            <option value="4">Mejor valorados</option>
+                            <option value="5">Más vendidos</option>
+                            <option value="6">Precio: de más alto a más bajo</option>
+                            <option value="7">Precio: de más bajo a más alto</option>
+                        </select>                        
+                    </div>
+                </div>
+            </div>
+            <hr />
+
+               <!-- @if( productos().length > 0){ .... no hace falta si usas @empty -->
+                    @for(producto of productos(); track $index)
+                    {
+                        <div class='row'>
+                            <div class='col'>
+                                <!-- para pasar el producto a pintar al componente hijo, necestio declarar como variable "input" el producto a pintar-->
+                                <app-miniproducto [productoAPintar]="producto" /> 
+                            </div>
+                        </div>
+                    }@empty {
+                        <div>No se encontraron productos de esa categoria...</div>
+                    }
+            
+        </div>

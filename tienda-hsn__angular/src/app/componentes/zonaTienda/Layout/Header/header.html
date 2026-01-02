@@ -5,8 +5,41 @@
           <div><p>Envio gratuito a partir de 29,99€*</p></div>
           <div><p style='text-align:center'><a href="https://www.hsnstore.com/contacts" style="text-decoration:underline; color:inherit">Contacta con nosotros aqui</a></p></div>
           <div>
+            @if( cliente$() )
+            {
+            
+                  <div class="dropdown">
+                    <button class="btn btn-light btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <span >Hola, {{ cliente$()!.nombre + ' ' + cliente$()!.apellidos | camelCaseString:10 }} ( {{cliente$()!.cuenta.email}} )</span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        @for( item of [ 
+                                      'Mis datos personales', 
+                                       'Mis Pedidos',
+                                      'Mis Tickets', 
+                                      'Plan Ahorro', 
+                                      'Libreta de direcciones', 
+                                      'Guardados para luego', 
+                                      'Mis favoritos', 
+                                      'Puntos HSN', 
+                                      'Plan Amigo', 
+                                      'SALIR']; track $index)
+                        {
+                          @let itemTrans=item.replaceAll(' ', '').toLowerCase();
+                          <li ><a class="dropdown-item" [href]="'/Cliente/Cuenta/'+ itemTrans"><span style='font-size: 0.9em'>{{item}}</span></a></li>
+                        }
+                    </ul>
+                  </div>                  
+              } 
+              @else
+              {                
                   <a href="/Cliente/Login" style='margin-right:8px'>Iniciar sesión</a>
                   <a href="/Cliente/Registro" >Crear Cuenta</a>
+              }
+
+
+
+
           </div>
         </div>
       </div> 
@@ -27,15 +60,48 @@
                       </div>
                   </form>
 
-                  <div class="d-flex align-items-center">
-                      <a href="/Pedido/PedidoActual" class="text-muted me-2 position-relative">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
-                          <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .491.592l-1.5 6A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L1.01 1.607 1 1.5H.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
-                      </svg>
-                      <!-- {/* ... mostrar cantidad de items en el carrito, NO VALE LA LONGITUD DEL ARRAY!!! pq depende de la cantidad de producto por item ...*/} -->
-                      <span class="badge bg-danger rounded-pill position-absolute hsn-cart-badge">0</span>
-                      </a>
-                  </div>
+                    <div #cartDiv class="d-flex align-items-center" appDragAndDrop (showPanelItemsCartEvent)="showPanelItemsCart.set(true)" [ngStyle]="{visibility: showPanelItemsCart() ? 'hidden': 'visible', cursor:'pointer'}">
+                        <a href="/Pedido/PedidoActual" class="text-muted me-2 position-relative">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16" (mouseenter)="showPanelItemsCart.set(true); cartDiv.style.visibility='hidden';"> 
+                            <path d="M0 1.5A.5.5 0 0 1 .5 1h1a.5.5 0 0 1 .485.379L2.89 5H14.5a.5.5 0 0 1 .491.592l-1.5 6A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L1.01 1.607 1 1.5H.5zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/>
+                        </svg>
+                        <!--  
+                              2 opciones:
+                                - mostrar numero de productos distintos en el carrito, no cantidades: {{carrito().itemsPedido.length}}
+                                - mostrar cantidad de items en el carrito {{ carrito().itemsPedido.reduce( (acc, item) => acc + item.cantidad, 0) }}
+                        -->
+                        <span class="badge bg-danger rounded-pill position-absolute hsn-cart-badge">{{ totalItems() }}</span>
+                        </a>
+                    </div>
+                    <!-- panel de elementos del carrito que se muestran cuando paso el cursor sobre el icono del carro o cuando hago drag-drop de un producto sobre el mismo -->
+                     @if( showPanelItemsCart() )
+                     {
+                        <div class='hsn-cart-items-panel p-3 shadow-lg' (mouseleave)="showPanelItemsCart.set(false)">
+                            @if( carrito() && carrito().itemsPedido && carrito().itemsPedido.length > 0 )
+                            {
+                                @for( item of carrito().itemsPedido; track $index )
+                                {
+                                    <div class='d-flex flex-row justify-content-between align-items-center mb-2'>
+                                        <div class='d-flex flex-row align-items-center'>
+                                            <img [src]="item.producto.Imagenes[0]" alt="{{item.producto.Nombre}}" style='width:50px; height:50px; object-fit:cover; margin-right:8px; border:1px solid #ccc; border-radius:4px' />
+                                            <div>
+                                                <div style='font-size:0.9em; font-weight:bold'>{{ item.producto.Nombre }}</div>
+                                                <div style='font-size:0.8em; color:#666'>Cantidad: {{ item.cantidad }}</div>
+                                            </div>
+                                        </div>
+                                        <div style='font-weight:bold'>{{ (item.producto.Precio * (1 - item.producto.Oferta/100) * item.cantidad).toFixed(2) }}€</div>
+                                    </div>
+                                }
+                                <div class='text-end mt-3'>
+                                    <a href="/Pedido/PedidoActual" class="btn btn-primary btn-sm">Ver Cesta</a>
+                                </div>
+                            }
+                            @else {
+                                <div class='text-center text-muted'>Tu cesta está vacía</div>
+                            }
+                        </div>
+                     }
+
                   </div>
               </nav>
           </div>
@@ -57,7 +123,7 @@
                   @for ( cat of categoriasPrincipales; track $index) 
                   {
                     <li class="nav-item p-2">
-                      <a  [href]="'/Tienda/Productos/' + cat.pathCategoria">
+                      <a  [href]="'/Tienda/Productos/' + cat.pathCategoria" (mouseenter)="CargarSubcats(cat)">
                         <span class="catsppales">{{cat.nombreCategoria}} <i class='fas fa-chevron-down'></i></span>   
                       </a>
                     </li>
@@ -69,6 +135,43 @@
           </div>
         </div>
       </div>
+      <!-- {/* Mega panel: aparece bajo la barra de categorias */} -->
+      <!--  con subcategorias dentro de una señal seria asi:
 
+             @if(subcatSignal() && subcatSignal().length > 0 && showPanel() )
+            {
+             ...
+             @for( subact of subcatSignal(); track $index )
+             {
+                ...
+             } 
+      -->
+
+       @let subcats=subcategorias$ | async;
+       @if( subcats && subcats.length > 0 && showPanel() )
+        {
+          <div class='heading2'>Selecciona Categoria</div>
+          <div class='menucontainer' (mouseleave)="showPanel.set(false)">          
+            <ul>
+              @for(subcat of subcats; track $index)
+              {
+                <li class='first-lvl'>
+                  <a [href]="`/Tienda/Productos/${subcat.pathCategoria}`">{{subcat.nombreCategoria}}</a>
+                  @if( subcat.subcategorias.length > 0 )
+                  {
+                    <ul>
+                      @for(tercat of subcat.subcategorias; track $index)
+                      {
+                        <li style='border-bottom:none; font:normal 10px "Roboto","Open Sans",sans-serif; color:#666'>
+                          <a [href]="`/Tienda/Productos/${tercat.pathCategoria}`">{{tercat.nombreCategoria}}</a>
+                        </li>
+                      }
+                    </ul>                                                  
+                  }
+                </li>
+              }
+            </ul>
+          </div>          
+        } 
     </div>
 

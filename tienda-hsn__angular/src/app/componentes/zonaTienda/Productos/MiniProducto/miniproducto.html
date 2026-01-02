@@ -1,0 +1,70 @@
+    <div [id]="productoAPintar()!._id"  class="card m-3" draggable="true" style="cursor:grab" (dragstart)="SetDragStart($event, productoAPintar())">
+        <div class='row'>
+
+            <div class='col-3' style="cursor:pointer">
+                <div class="d-flex flex-col justify-content-center align-items-center">
+                    <div><img [src]="productoAPintar()!.Imagenes[0]" class="img-fluid rounded-start"  style='width: 170px; height: 170px;' [alt]="productoAPintar()!.Nombre" /></div>
+                    <!-- {/* el icono cuando se clickea del corazon seria:  <i class="fa-solid fa-heart"></i> */} -->
+                    <div class='d-flex flex-row justify-content-center align-items-center'>
+                        <span class='bubbles'>TOP VENTAS</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class='col-5'>
+                <div class="card-body">
+                    <h5 class="card-title"><strong>{{productoAPintar()!.Nombre}}</strong></h5>
+                    <!-- { 
+                        /*  estrellas segun array  producto.valoraciones y puntuacion media de las mismas */
+                        Array.from({ length: 5 }, (_, i) => i).map( (el,pos)=><i key={pos} class="fa-solid fa-star" style={{color:'#ff6000'}}></i>)
+                    } -->
+                    <span style='color:#ff6000'>0</span>
+
+
+                    <p class="card-text">{{productoAPintar()!.Descripcion}}</p>
+                </div>               
+            </div>
+
+            <div class='col-4 d-flex flex-column justify-content-between mb-3 mt-2'>
+                <!-- {/* precios del producto y rebajas */} -->
+                <div class='d-flex flex-row justify-content-start align-items-center mb-2'>
+                    <!-- esta operacion para mostrar el precio con descuento no se si angular lo permite...lo mismo necestiamos pipe o @let ...-->
+                    <span style='font-style:italic; font-weight:bold;font-size:1.1em'> {{ (productoAPintar()!.Precio * (1- productoAPintar()!.Oferta/100)).toFixed(2) }}€</span>
+                    <span style='text-decoration:line-through; color:#ccc; font-style:italic'>{{productoAPintar()!.Precio}}€</span>
+                    <span class='discount-percentage'>-{{productoAPintar()!.Oferta}}%</span>
+                </div>
+                
+                <!-- {/* lista formatos producto */} -->
+                <select class="form-select form-select-sm mb-2" aria-label="Default select example" name="Formato" >
+                @for(formato of productoAPintar()!.Formato; track $index)
+                {
+                    <option key={$index} value={formato}>{{formato}}</option>
+                }
+                </select>
+
+                <!-- lista sabores producto -->
+                <select class="form-select form-select-sm mb-2" aria-label="Default select example" name="Sabores" >
+                @for(sabor of productoAPintar()!.Sabores; track $index)
+                {
+                    <option key={$index}  value={sabor}>{{sabor}}</option>
+                }
+                </select>
+
+                <!-- lista cantidades producto -->
+                <select class="form-select form-select-sm mb-2" aria-label="Default select example" name="cantidad"  value={cantidad}>
+                @for(cantidad of cantidades; track $index)
+                 {
+                    <option key={$index} value={cantidad}>{{cantidad}}</option>
+                }
+                </select>
+
+                <!-- {/* boton añadir al carrito */} -->
+                <button type="button" class="btn btn-success" style="font-size: 1.4em; background-color: #00b22d; color: white; border: 1px solid #00b22d; box-shadow: 0 5px 0 0 #2c942f; font-weight: bold; font-style: italic; padding: 10px 20px; width: 100%;">
+                    <i class="fa-solid fa-cart-shopping"></i> AÑADIR <i class="fa-solid fa-arrow-right"></i>  {{(productoAPintar()!.Precio * (1 - productoAPintar()!.Oferta / 100)).toFixed(2)}}€
+                </button>
+
+            </div>
+
+        </div>
+
+    </div>
